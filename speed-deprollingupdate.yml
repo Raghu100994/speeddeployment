@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: speeddeployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      appName: speed
+      version: v1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        appName: speed
+        version: v1
+    spec:
+      containers:
+        - name: speedcontainer
+          image: raghravi94/speeddeployment:1.0
+          ports:
+            - name: tomcatport
+              containerPort: 8080
+              protocol: TCP
+#          livenessProbe:
+#            httpGet:
+#              path: /speed/actuator/health/liveness.htm
+#              port: 8080
+#            initialDelaySeconds: 60
+#            periodSeconds: 10
+#          readinessProbe:
+#            httpGet:
+#              path: /speed/actuator/health/readiness.htm
+#              port: 8080
+#            initialDelaySeconds: 60
+#            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "1"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "512Mi"
